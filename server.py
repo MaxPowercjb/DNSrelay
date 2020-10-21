@@ -5,7 +5,6 @@ import struct
 from time import time, strftime
 from message import Header, Question
 from localdns import local_lookup
-
 from settings import settings 
 
 
@@ -26,7 +25,7 @@ def response(data,address,timeout=2.0):
     header = Header(data)
     question = Question(data)
     domain = question.get_domain()
-    print('\nnow processing domain name: {}\n'.format(domain))
+    print('\nrequest domain name: {}\n'.format(domain))
     qtype = int().from_bytes(question.qtype,byteorder='big', signed=False)
     qcount = int().from_bytes(header.qdcount,byteorder='big', signed=False)
     qclass = int().from_bytes(question.qclass,byteorder='big', signed=False)
@@ -45,7 +44,7 @@ def response(data,address,timeout=2.0):
         support = False
 
     if support == False:
-        print("\nsending query {} to remote dns server,requested domain name: {}\n".format(header.t_id,domain))
+        print("\nsending query {} to remote dns server,request domain name: {}\n".format(header.t_id,domain))
         sock_client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         for server in settings['RemoteDnsServer']:
             remote_server_addr = (server,53)
@@ -69,7 +68,7 @@ def response(data,address,timeout=2.0):
         sock_client.close()
         
     if succ:
-        print('\nsend rr to query:{}\n'.format(domain))
+        print('\nsend response to query:{}\n'.format(domain))
     sock.sendto(rr,address)                  
             
     return support,rr,address
