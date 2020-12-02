@@ -1,4 +1,3 @@
-from enum import Flag
 import struct
 
 r_flags = int().from_bytes(b'\x81\x00',byteorder='big',signed=False)

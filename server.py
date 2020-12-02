@@ -7,8 +7,6 @@ from message import Header, Question
 from localdns import local_lookup
 from settings import settings 
 
-
-
 r_rd = int().from_bytes(b'\x01\x00',byteorder='big',signed=False)
 
 check_q_r = 32768
@@ -69,13 +67,8 @@ def response(data,address,timeout=2.0):
         
     if succ:
         print('\nsend response to query:{}\n'.format(domain))
-    sock.sendto(rr,address)                  
-            
+    sock.sendto(rr,address)                      
     return support,rr,address
-
-
-
-
 
 def main():
     
@@ -90,8 +83,6 @@ def main():
             is_response = int().from_bytes(head.flag[0:2],byteorder='big',signed=False) & check_q_r
             if not is_response:
                 executor.submit(response,query,address)
-            #flags,rr,addr = response(query,address)
-            #sock.sendto(rr,address)
         except Exception as e:
             print(e) 
 
