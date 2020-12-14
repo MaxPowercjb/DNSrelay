@@ -15,12 +15,10 @@ class Header(object):
         self.nscount = msg[8:10]
         self.arcount = msg[10:12]
 
-
     def rflags(self):
         rflag = (self.t_flag & r_flags) | r_qr
         rflag = struct.pack('!H',rflag)
         return rflag
-
 
 class Question(object):
     def __init__(self,query):

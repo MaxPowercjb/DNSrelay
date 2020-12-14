@@ -12,7 +12,8 @@ with open(settings['CachedDnsFile'],'r') as f:
 
 def local_lookup(domain):
     if domain in cacheddns.keys():
-        return (True,cacheddns[domain])
+        ip = cacheddns[domain]
+        return (True,ip)
     else:
         return (False,None)
 
