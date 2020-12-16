@@ -14,6 +14,7 @@ class Header(object):
         self.ancount = msg[6:8]
         self.nscount = msg[8:10]
         self.arcount = msg[10:12]
+        self.is_response = int().from_bytes(self.flag[0:2],byteorder='big',signed=False) & 32768
 
     def rflags(self):
         rflag = (self.t_flag & r_flags) | r_qr
