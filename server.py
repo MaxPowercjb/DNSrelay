@@ -26,8 +26,8 @@ def response(data,address,timeout=2.0):
     qcount = int().from_bytes(header.qdcount,byteorder='big', signed=False)
     qclass = int().from_bytes(question.qclass,byteorder='big', signed=False)
     flag,ip = local_lookup(domain)
-    if(flag==1):
-        if(ip=="0.0.0.0"):
+    if flag==1:
+        if ip=="0.0.0.0":
             print("request domain {} , id {} , status:intercepted".format(domain,header.t_id))
         else:
             print("request domain {} , id {} , status:local".format(domain,header.t_id))
