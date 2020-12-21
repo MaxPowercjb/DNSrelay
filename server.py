@@ -8,8 +8,6 @@ import _thread
 
 r_rd = int().from_bytes(b'\x01\x00',byteorder='big',signed=False)
 
-#check_q_r = 32768
-
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
 server_address = ('localhost', settings['LocalServerPort'])
@@ -57,7 +55,6 @@ def response(data,address,timeout=2.0):
                     temp,addr = sock_client.recvfrom(512)
                     check_header = Header(temp)
                     is_response = check_header.is_response
-                    #is_response = int().from_bytes(check_header.flag[0:2],byteorder='big',signed=False) & check_q_r
                     if check_header.t_id == header.t_id and is_response > 0:
                         rr = temp
                         succ = True
@@ -88,7 +85,6 @@ def main():
         try:
             query,address = sock.recvfrom(512)
             head = Header(query)
-            #is_response = int().from_bytes(head.flag[0:2],byteorder='big',signed=False) & check_q_r
             is_response = head.is_response
             if not is_response:
                 argvs = (query,address)
