@@ -14,6 +14,7 @@ server_address = ('localhost', settings['LocalServerPort'])
 sock.bind(server_address)
 
 def response(data,address,timeout=2.0):
+    init_start = time()
     errlog = open("error.log","a")
     errmsgs = []
     rr = b''
@@ -40,6 +41,8 @@ def response(data,address,timeout=2.0):
         r_response = question.qname + question.qtype + question.qclass + b'\x00\x00\xFF\xFF' + b'\x00\x04' + r_ip
         rr = r_header + question.content + r_response
         succ = True
+        process_time = time() - init_start
+        print("request domain {} , id {} , process time {:.3f}s".format(domain,header.t_id,process_time))
 
     else:
         sock_client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -58,6 +61,8 @@ def response(data,address,timeout=2.0):
                     if check_header.t_id == header.t_id and is_response > 0:
                         rr = temp
                         succ = True
+                        process_time = time() - init_start
+                        print("request domain {} , id {} , process time {:.3f}s".format(domain,header.t_id,process_time))
                         break
                 break
             except Exception as e:
