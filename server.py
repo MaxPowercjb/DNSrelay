@@ -27,22 +27,25 @@ def response(data,address,timeout=2.0):
     qcount = int().from_bytes(header.qdcount,byteorder='big', signed=False)
     qclass = int().from_bytes(question.qclass,byteorder='big', signed=False)
     flag,ip = local_lookup(domain)
+    rflags:bytes
     if flag==1:
         if ip=="0.0.0.0":
+            rflags = header.rflags(False)
             print("request domain {} , id {} , status:intercepted".format(domain,header.t_id))
         else:
+            rflags = header.rflags(True)
             print("request domain {} , id {} , status:local".format(domain,header.t_id))
     else:
         print("request domain {} , id {} , status:resolve".format(domain,header.t_id))
     if qtype == 1 and qcount == 1 and qclass == 1 and flag == 1:
         ip0,ip1,ip2,ip3 = ip.split('.')
         r_ip = struct.pack('!BBBB',int(ip0),int(ip1),int(ip2),int(ip3))
-        r_header = header.id+header.rflags()+header.qdcount+b'\x00\x01'+b'\x00\x00'+b'\x00\x00'
+        r_header = header.id+rflags+header.qdcount+b'\x00\x01'+b'\x00\x00'+b'\x00\x00'
         r_response = question.qname + question.qtype + question.qclass + b'\x00\x00\xFF\xFF' + b'\x00\x04' + r_ip
         rr = r_header + question.content + r_response
         succ = True
         process_time = time() - init_start
-        print("request domain {} , id {} , process time {:.3f}s".format(domain,header.t_id,process_time))
+        print("request domain {} , id {} , process time {:.3f}ms".format(domain,header.t_id,process_time))
 
     else:
         sock_client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

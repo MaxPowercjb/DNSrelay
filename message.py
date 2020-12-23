@@ -2,6 +2,7 @@ import struct
 
 r_flags = int().from_bytes(b'\x81\x00',byteorder='big',signed=False)
 r_qr = int().from_bytes(b'\x80\x00',byteorder='big',signed=False)
+r_intercept = int().from_bytes(b'\x80\x03',byteorder='big',signed=False)
 
 class Header(object):
     def __init__(self,msg):
@@ -16,9 +17,14 @@ class Header(object):
         self.arcount = msg[10:12]
         self.is_response = int().from_bytes(self.flag[0:2],byteorder='big',signed=False) & 32768
 
-    def rflags(self):
-        rflag = (self.t_flag & r_flags) | r_qr
-        rflag = struct.pack('!H',rflag)
+    def rflags(self,status):
+        rflag = None
+        if status:
+            rflag = (self.t_flag & r_flags) | r_qr
+            rflag = struct.pack('!H',rflag)
+        else:
+            rflag = (self.t_flag & r_flags) | r_intercept
+            rflag = struct.pack('!H',rflag)
         return rflag
 
 class Question(object):
