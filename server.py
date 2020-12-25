@@ -37,7 +37,7 @@ def response(data,address,timeout=2.0):
             print("request domain {} , id {} , status:local".format(domain,header.t_id))
     else:
         print("request domain {} , id {} , status:resolve".format(domain,header.t_id))
-    if qtype == 1 and qcount == 1 and qclass == 1 and flag == 1:
+    if (qtype == 1 or qtype == 28) and qcount == 1 and qclass == 1 and flag == 1:
         ip0,ip1,ip2,ip3 = ip.split('.')
         r_ip = struct.pack('!BBBB',int(ip0),int(ip1),int(ip2),int(ip3))
         r_header = header.id+rflags+header.qdcount+b'\x00\x01'+b'\x00\x00'+b'\x00\x00'
