@@ -45,7 +45,7 @@ def response(data,address,timeout=2.0):
         rr = r_header + question.content + r_response
         succ = True
         process_time = time() - init_start
-        print("request domain {} , id {} , process time {:.3f}ms".format(domain,header.t_id,process_time))
+        print("request domain {} , id {} , process time {:.3f}s".format(domain,header.t_id,process_time))
 
     else:
         sock_client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
